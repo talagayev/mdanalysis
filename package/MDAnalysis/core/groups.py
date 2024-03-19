@@ -2211,7 +2211,7 @@ class GroupBase(_MutableBase):
         >>> ag2 = u.atoms[[4, 4, 6, 2, 3, 5]]
         >>> ag3 = ag1 ^ ag2  # or ag1.symmetric_difference(ag2)
         >>> ag3.indices  # 0 and 1 are only in ag1, 4 and 6 are only in ag2
-        [0, 1, 4, 6]
+        array([0, 1, 4, 6])
 
         See Also
         --------
