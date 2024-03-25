@@ -570,10 +570,10 @@ class HydrogenBondAnalysis(AnalysisBase):
 
         """
 
-        ag = self.u.select_atoms(select)
+        ag = self.u.select_atoms(select, updating=True)
         acceptors_ag = ag[ag.charges < max_charge]
 
-        return self._group_categories(acceptors_ag)
+        return acceptors_ag
 
     @staticmethod
     def _group_categories(group):
@@ -702,12 +702,45 @@ class HydrogenBondAnalysis(AnalysisBase):
         # Set atom selections if they have not been provided
         if self.acceptors_sel is None:
             self.acceptors_sel = self.guess_acceptors()
+        # Adjustment according to provided selection
+        else:
+            # If an AtomGroup was provided by user
+            if str(type(self.acceptors_sel)) == "<class 'MDAnalysis.core.groups.AtomGroup'>":
+                self._acceptors = self.acceptors_sel
+            else:
+                # If a combination of a selection string and AtomGroup was provided by user
+                start_index = str(self.acceptors_sel).find(" or <AtomGroup")
+                start_index_1 = str(self.acceptors_sel).find(" or <AtomGroup")
+                start_index_2 = str(self.acceptors_sel).find(" or (<AtomGroup")
+                start_index = min(start_index_1, start_index_2) if start_index_1 != -1 and start_index_2 != -1 else max(start_index_1, start_index_2)
+                end_index_1 = str(self.acceptors_sel).find("]>) or (")
+                end_index_2 = str(self.acceptors_sel).find("]>) or ")
+                end_index = min(end_index_1, end_index_2) if end_index_1 != -1 and end_index_2 != -1 else max(end_index_1, end_index_2)
+                if start_index != -1:
+                    part1_sel = self.guess_acceptors()
+                    if end_index != -1:
+                        part2_sel = str(self.acceptors_sel)[:start_index] + str(self.acceptors_sel)[end_index + 3:].replace("(", "")
+                    else:
+                        part2_sel = str(self.acceptors_sel)[:start_index].replace("((", "(") + ")"
+                    part2_sel = self.u.select_atoms(f"{part2_sel}",
+                                                    updating=self.update_selections)
+                    self._acceptors = part1_sel + part2_sel
+                elif end_index != -1:
+                    part1_sel = self.guess_acceptors()
+                    part2_sel = str(self.acceptors_sel)[end_index + 6:]
+                    part2_sel = self.u.select_atoms(f"{part2_sel}",
+                                                    updating=self.update_selections)
+                    self._acceptors = part1_sel + part2_sel
+                else:
+                    # if only a string selection was provided by the user
+                    self._acceptors = self.u.select_atoms(self.acceptors_sel,
+                                                    updating=self.update_selections)
+        if self.hydrogens_sel is None:
+            self.hydrogens_sel = self.guess_hydrogens()
         if self.hydrogens_sel is None:
             self.hydrogens_sel = self.guess_hydrogens()
 
         # Select atom groups
-        self._acceptors = self.u.select_atoms(self.acceptors_sel,
-                                              updating=self.update_selections)
         self._donors, self._hydrogens = self._get_dh_pairs()
 
     def _single_frame(self):
