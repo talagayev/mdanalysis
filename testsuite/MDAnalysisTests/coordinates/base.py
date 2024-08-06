@@ -536,6 +536,7 @@ class BaseReaderTest(object):
                 skip_reason = "MemoryReader"
             pytest.skip(f"Skipping test for Pathlib input with reason: {skip_reason}")
         path = Path(reader.filename)
+        path.as_posix()
         u_str = mda.Universe(reader.filename)
         u_path = mda.Universe(path)
         assert u_str.atoms.n_atoms == u_path.atoms.n_atoms
