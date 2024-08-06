@@ -1665,9 +1665,11 @@ class SingleFrameReaderBase(ProtoReader):
 
         if isinstance(filename, NamedStream):
            print(type(filename))
+           print("sup")
            self.filename = filename
         else:
            print(type(filename))
+           print("hello there")
            self.filename = str(filename)
 
         self.convert_units = convert_units
