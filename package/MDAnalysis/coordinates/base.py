@@ -1666,7 +1666,10 @@ class SingleFrameReaderBase(ProtoReader):
         if isinstance(filename, NamedStream):
             self.filename = filename
         else:
-            self.filename = str(filename)
+            if hasattr(filename, 'topology'):
+                self.filename = filename
+            else:
+                self.filename = str(filename)
               
         self.convert_units = convert_units
 
