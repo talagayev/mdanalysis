@@ -47,7 +47,6 @@ from ..coordinates.base import IOBase
 from ..lib import util
 
 
-
 class _Topologymeta(type):
     """Internal: Topology Parser registration voodoo
 
@@ -121,6 +120,8 @@ class TopologyReaderBase(IOBase, metaclass=_Topologymeta):
             self.filename = filename
         else:
             self.filename = str(filename)
+            if "Parser" in self.filename:
+               self.filename = filename
 
     def parse(self, **kwargs):  # pragma: no cover
         raise NotImplementedError("Override this in each subclass")
