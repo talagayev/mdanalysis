@@ -1667,8 +1667,6 @@ class SingleFrameReaderBase(ProtoReader):
            self.filename = filename
         else:
            self.filename = str(filename)
-           if "MMTF" in self.filename:
-              self.filename = filename
 
         self.convert_units = convert_units
 
