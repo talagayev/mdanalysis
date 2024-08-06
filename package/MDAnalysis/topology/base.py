@@ -41,6 +41,7 @@ from functools import reduce
 import itertools
 import numpy as np
 import warnings
+import parmed as pmd
 
 from .. import _PARSERS, _PARSER_HINTS
 from ..coordinates.base import IOBase
@@ -118,8 +119,11 @@ class TopologyReaderBase(IOBase, metaclass=_Topologymeta):
 
         if isinstance(filename, util.NamedStream):
             self.filename = filename
+        elif isinstance(filename, pmd.Structure):
+            self.filename = filename
         else:
             self.filename = str(filename)
+         
 
     def parse(self, **kwargs):  # pragma: no cover
         raise NotImplementedError("Override this in each subclass")
