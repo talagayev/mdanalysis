@@ -1,12 +1,5 @@
 name: GH Actions CI
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - develop
-  workflow_dispatch:
+on: [push]
 
 concurrency:
   # Probably overly cautious group naming.
