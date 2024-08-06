@@ -128,6 +128,8 @@ class TopologyReaderBase(IOBase, metaclass=_Topologymeta):
        }
         if isinstance(filename, util.NamedStream):
             self.filename = filename
+        elif any(substring in type(filename) for substring in unwanted_substrings):
+            self.filename = filename
         else:
             self.filename = str(filename)
             if any(substring in self.filename for substring in unwanted_substrings):
