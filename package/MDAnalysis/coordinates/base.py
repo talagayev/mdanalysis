@@ -127,7 +127,6 @@ import abc
 import numpy as np
 import numbers
 import warnings
-from parmed.structure import Structure
 from typing import Any, Union, Optional, List, Dict
 
 from .timestep import Timestep
