@@ -123,6 +123,8 @@ class TopologyReaderBase(IOBase, metaclass=_Topologymeta):
         "Parser": None,
         "parmed": None,
         "openmm": None,
+        "converters": None,
+        "Converters": None,
        }
         if isinstance(filename, util.NamedStream):
             self.filename = filename
