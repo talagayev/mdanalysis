@@ -116,24 +116,7 @@ class TopologyReaderBase(IOBase, metaclass=_Topologymeta):
     """
     def __init__(self, filename):
 
-        unwanted_substrings = {
-        "MMTF": None,
-        "Parmed": None,
-        "OpenMM": None,
-        "Parser": None,
-        "parmed": None,
-        "openmm": None,
-        "converters": None,
-        "Converters": None,
-       }
-        if isinstance(filename, util.NamedStream):
-            self.filename = filename
-        elif any(substring in type(filename) for substring in unwanted_substrings):
-            self.filename = filename
-        else:
-            self.filename = str(filename)
-            if any(substring in self.filename for substring in unwanted_substrings):
-               self.filename = filename
+        self.filename = filename
 
     def parse(self, **kwargs):  # pragma: no cover
         raise NotImplementedError("Override this in each subclass")
