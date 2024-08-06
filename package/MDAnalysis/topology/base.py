@@ -115,12 +115,20 @@ class TopologyReaderBase(IOBase, metaclass=_Topologymeta):
        Added keyword 'universe' to pass to Atom creation.
     """
     def __init__(self, filename):
-       
+
+        unwanted_substrings = {
+        "MMTF": None,
+        "Parmed": None,
+        "OpenMM": None,
+        "Parser": None,
+        "parmed": None,
+        "openmm": None,
+       }
         if isinstance(filename, util.NamedStream):
             self.filename = filename
         else:
             self.filename = str(filename)
-            if "Parser" in self.filename:
+            if any(substring in self.filename for substring in unwanted_substrings):
                self.filename = filename
 
     def parse(self, **kwargs):  # pragma: no cover
