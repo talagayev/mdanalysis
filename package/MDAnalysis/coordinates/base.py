@@ -1663,7 +1663,15 @@ class SingleFrameReaderBase(ProtoReader):
     def __init__(self, filename, convert_units=True, n_atoms=None, **kwargs):
         super(SingleFrameReaderBase, self).__init__()
 
-        self.filename = filename
+        if isinstance(filename, NamedStream):
+            self.filename = filename
+        else:
+            if hasattr(filename, 'topology'):
+                self.filename = filename
+            else:
+                self.filename = str(filename)
+                if "MMTF" in self.filename:
+                    self.filename = filename
               
         self.convert_units = convert_units
 
