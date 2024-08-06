@@ -127,7 +127,7 @@ import abc
 import numpy as np
 import numbers
 import warnings
-import parmed
+from parmed.structure import Structure
 from typing import Any, Union, Optional, List, Dict
 
 from .timestep import Timestep
@@ -1666,7 +1666,7 @@ class SingleFrameReaderBase(ProtoReader):
 
         if isinstance(filename, NamedStream):
            self.filename = filename
-        elif isinstance(filename, parmed.structure.Structure):
+        elif isinstance(filename, Structure):
            self.filename = filename
         else:
            self.filename = str(filename)
