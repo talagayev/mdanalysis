@@ -1663,7 +1663,12 @@ class SingleFrameReaderBase(ProtoReader):
     def __init__(self, filename, convert_units=True, n_atoms=None, **kwargs):
         super(SingleFrameReaderBase, self).__init__()
 
-        self.filename = filename
+        if isinstance(filename, NamedStream):
+           print(type(filename))
+           self.filename = filename
+        else:
+           print(type(filename))
+           self.filename = str(filename)
 
         self.convert_units = convert_units
 
