@@ -1663,13 +1663,9 @@ class SingleFrameReaderBase(ProtoReader):
     def __init__(self, filename, convert_units=True, n_atoms=None, **kwargs):
         super(SingleFrameReaderBase, self).__init__()
 
-        if isinstance(filename, NamedStream):
-           print(type(filename))
-           print("sup")
+        if isinstance(filename, NamedStream) or "MMTF" in filename::
            self.filename = filename
         else:
-           print(type(filename))
-           print("hello there")
            self.filename = str(filename)
 
         self.convert_units = convert_units
