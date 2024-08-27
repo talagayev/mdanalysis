@@ -307,7 +307,7 @@ class Dihedral(AnalysisBase):
         self.results.angles = []
 
     def _get_aggregator(self):
-        return ResultsGroup(lookup={'angles': ResultsGroup.ndarray_vstack})
+        return ResultsGroup(lookup={'angles': ResultsGroup.ndarray_hstack})
 
     def _single_frame(self):
         angle = calc_dihedrals(self.ag1.positions, self.ag2.positions,
@@ -456,7 +456,7 @@ class Ramachandran(AnalysisBase):
         self.results.angles = []
 
     def _get_aggregator(self):
-        return ResultsGroup(lookup={'angles': ResultsGroup.ndarray_vstack})
+        return ResultsGroup(lookup={'angles': ResultsGroup.ndarray_hstack})
 
     def _single_frame(self):
         phi_angles = calc_dihedrals(self.ag1.positions, self.ag2.positions,
