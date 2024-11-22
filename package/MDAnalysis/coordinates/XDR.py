@@ -38,7 +38,7 @@ import errno
 import numpy as np
 from os.path import getctime, getsize, isfile, split, join
 import warnings
-import fasteners
+from filelock import FileLock
 
 from . import base
 from ..lib.mdamath import triclinic_box
@@ -195,7 +195,7 @@ class XDRBaseReader(base.ReaderBase):
 
         #  check if the location of the lock is writable.
         try:
-            with fasteners.InterProcessLock(lock_name) as filelock:
+            with FileLock(lock_name) as filelock:
                 pass
         except OSError as e:
             if isinstance(e, PermissionError) or e.errno == errno.EROFS:
@@ -206,7 +206,7 @@ class XDRBaseReader(base.ReaderBase):
             else:
                 raise
 
-        with fasteners.InterProcessLock(lock_name) as filelock:
+        with FileLock(lock_name) as filelock:
             if not isfile(fname):
                 self._read_offsets(store=True)
                 return
