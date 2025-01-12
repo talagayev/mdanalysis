@@ -33,7 +33,7 @@ import os.path as path
 import numpy as np
 import warnings
 
-from MDAnalysis.analysis.base import AnalysisBase, Results
+from MDAnalysis.analysis.base import AnalysisBase, Results, ResultsGroup
 from MDAnalysis.units import constants
 from MDAnalysis.lib.util import deprecate
 
@@ -198,6 +198,16 @@ class LinearDensity(AnalysisBase):
        and :attr:`results.x.charge_density_stddev` instead.
     """
 
+    _analysis_algorithm_is_parallelizable = True
+
+    @classmethod
+    def get_supported_backends(cls):
+        return (
+            "serial",
+            "multiprocessing",
+            "dask",
+        )
+
     def __init__(self, select, grouping="atoms", binsize=0.25, **kwargs):
         super(LinearDensity, self).__init__(
             select.universe.trajectory, **kwargs
@@ -344,6 +354,15 @@ class LinearDensity(AnalysisBase):
             norm = k * self.results[dim]["slice_volume"]
             for key in self.keys:
                 self.results[dim][key] /= norm
+
+    def _get_aggregator(self):
+        return ResultsGroup(
+            lookup={
+                "x": ResultsGroup.ndarray_vstack,
+                "y": ResultsGroup.ndarray_vstack,
+                "z": ResultsGroup.ndarray_vstack,
+            }
+        )
 
     # TODO: Remove in 3.0.0
     @deprecate(
