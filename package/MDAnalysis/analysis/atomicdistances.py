@@ -155,6 +155,7 @@ class AtomicDistances(AnalysisBase):
        *  Enabled **parallel execution** with the ``multiprocessing`` and ``dask``
           backends; use the new method :meth:`get_supported_backends` to see all
           supported backends.
+    .. _`Issue #4819`: https://github.com/MDAnalysis/mdanalysis/issues/4819
     """
 
     _analysis_algorithm_is_parallelizable = True
